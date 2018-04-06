@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>{{ title }}</title>
+    <title>URL SHORTENER!!!</title>
     <link href="https://cdn.jsdelivr.net/foundation/6.2.4/foundation.min.css" rel="stylesheet">
     <style>
       .form {
@@ -13,10 +13,10 @@
   </head>
   <body>
     <div class="form">
-      <form>
+      <form action="/" method="post">
         <div class="medium-6 cell">
-          <label>{{ formLabel }}
-            <input type="text" placeholder="{{ formInputPlaceholder }}">
+          <label>Enter a URL to shorten:
+            <input name="url" type="text" placeholder="Long URL goes here...">
           </label>
           <div class="input-group-button">
             <input type="submit" class="button" value="Submit">

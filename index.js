@@ -19,19 +19,33 @@
 
 const express = require('express');
 const nunjucks = require('nunjucks');
+const bodyParser = require('body-parser');
+const sh = require('shorthash');
 
 const app = express();
 
 app.set('view engine', 'html');
 nunjucks.configure('views', { express: app, watch: true });
+app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get('/', (req, res) => {
-  const data = {
-    title: 'URL SHORTENER!!!',
-    formLabel: 'Enter a URL to shorten:',
-    formInputPlaceholder: 'Long URL goes here...',
-  };
-  return res.render('form', data);
+const URL_MAP = {};
+
+function generateShortUrl(longUrl) {
+  return sh.unique(longUrl);
+}
+
+function saveUrlToMap(longUrl, shortUrl) {
+  URL_MAP[shortUrl] = longUrl;
+}
+
+app.get('/:slug', (req, res) => res.redirect(URL_MAP[req.params.slug]));
+
+app.get('/', (req, res) => res.render('form'));
+
+app.post('/', (req, res) => {
+  const shortUrl = generateShortUrl(req.body.url);
+  saveUrlToMap(req.body.url, shortUrl);
+  return res.render('form', { shortUrl: `http://localtest.me:1337/${shortUrl}` });
 });
 
 app.listen(1337, () => console.log('URL shortener app listening on port 1337!'));

@@ -9,11 +9,34 @@
         width: 50%;
         margin: 100px auto;
       }
+      .result {
+        display: none;
+      }
     </style>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+      // Extra 4
+      $(document).ready(function() {
+        $('#url-form').on('submit', function(e) {
+          e.preventDefault();
+          console.log($(this))
+          $.ajax({
+            type: 'POST',
+            url: $(this).action,
+            data: $(this).serialize(),
+            dataType: 'json'
+          }).done(function(data) {
+            console.log(data)
+            $('.result').show();
+            $('#short-url').text(data.shortUrl);
+          });
+        });
+      });
+    </script>
   </head>
   <body>
     <div class="form">
-      <form action="/" method="post">
+      <form id="url-form" action="/" method="post">
         <div class="medium-6 cell">
           <label>Enter a URL to shorten:
             <input name="url" type="text" placeholder="Long URL goes here...">
@@ -24,9 +47,7 @@
         </div>
       </form>
       <br>
-      {% if shortUrl %}
-        <p>Your short URL is: {{ shortUrl }}</p>
-      {% endif %}
+      <p class="result">Your short URL is: <span id="short-url"></span></p>
     </div>
   </body>
 </html>
